@@ -12,19 +12,8 @@ import time as t
 import getpass
 import datetime
 
-print("Merci de renseigner vos logins INSA.")
-formatUserIncorrect = True
-while True:
-    if formatUserIncorrect :
-        INSAuser = input("user : ")
-        formatUserIncorrect = not re.match("^[a-zA-Z]*\.*[a-zA-Z]*$",INSAuser)
-        if formatUserIncorrect :
-            print ("> format user incorrect. Merci de réessayer.")
-    else :
-        break
-INSApassword = getpass.getpass("mdp : ")
-intervalle = input("intervalle de verification (en minute) : ")
 
+#fonction qui envoie un mail
 def sendGrade(mat="Pas de nouvelle note",note=""):
     if note == "" :
         de = "GradeChecker <"+INSAuser+"@insa-rennes.fr>"
@@ -47,9 +36,10 @@ def sendGrade(mat="Pas de nouvelle note",note=""):
     smtp.login(username,password)
     smtp.sendmail(de, [pour], mail.as_string())
     smtp.close()
-    print ("********************\n* Message envoyé ! *\n********************")
+    print ("********************\n* Message envoyé ! *\n********************\n")
 
 
+#fonction qui retourne un string, sans les éventuels accents
 def deleteAccent(mstr):
     accent = ['é', 'è', 'ê', 'à', 'ù', 'û', 'ç', 'ô', 'î', 'ï', 'â']
     sans_accent = ['e', 'e', 'e', 'a', 'u', 'u', 'c', 'o', 'i', 'i', 'a']
@@ -57,8 +47,36 @@ def deleteAccent(mstr):
         mstr = mstr.replace(accent[i], sans_accent[i])
     return mstr
 
+# identification et teste de validité des valeurs rentrées par l'utilisateur
+print("Merci de renseigner vos logins INSA.")
 
+#user
+formatUserIncorrect = True
+while True:
+    if formatUserIncorrect :
+        INSAuser = input("user : ")
+        formatUserIncorrect = not re.match("^[a-zA-Z]*\.*[a-zA-Z]*$",INSAuser)
+        if formatUserIncorrect :
+            print ("> format user incorrect. Merci de réessayer.")
+    else :
+        break
 
+#password
+INSApassword = getpass.getpass("password : ")
+
+#wainting time (in minutes)
+formatIntervalleIncorrect = True
+while True:
+    intervalle = input("intervalle de verification (en minutes) : ")
+    try:
+        int(intervalle)
+        formatIntervalleIncorrect=False
+        break
+    except ValueError:
+        print("Entrez un nombre entier.")
+
+    
+# main
 while True:
     newGrade = False
     fileGrades = open('grades.txt','r')
@@ -75,32 +93,50 @@ while True:
     signup_form['password'].value = INSApassword
 
     # Submit the form
-    browser.submit_form(signup_form)
-    #print('> form submit DONE')
+    a = browser.submit_form(signup_form)
 
+    # break si, après identification, on se retrouve sur la page d'erreur
+    if browser.find_all(class_="errors") :
+        print("Mauvais identifiant ou Mot de Passe.")
+        break
+
+    # recuperation des notes et noms des matières
     resHtml = browser.find_all(class_="fl-tab-content")
     tabGrades = re.findall("[\d,]*\s/\s20",str(resHtml))
     tabMatieres = re.findall("left\">.*\-\s(.*)\s:",str(resHtml))
     for i in range(len(tabGrades)):
         tempFile.write(tabMatieres[i]+" : "+ tabGrades[i] +"\n")
     tempFile.close()
-    #print('> all grades fetched')
 
+    # cas ou le fichier grades.txt est vide, i.e la premiere execution du script sur cet ordinateur
+    nbLinesGrades = sum(1 for _ in fileGrades)
+    if nbLinesGrades < 2 :
+        print ('first writting')
+        fileGrades.close()
+        fileGrades = open('grades.txt','w')
+        for j in range(len(tabGrades)):
+            fileGrades.write(tabMatieres[j]+" : "+ tabGrades[j] +"\n")
+        fileGrades.close()
+        t.sleep(int(intervalle)*60)
+        continue
+
+
+    # cas ou le fichier n'etait pas vide
+    # comparaison du fichier temporaire (données à jour) avec le fichier sur l'ordinateur
+    fileGrades = open('grades.txt','r')
     tempFile = open('tempgrades.txt','r')
     lines1=fileGrades.readlines()
     lines2=tempFile.readlines()
     for i in range(len(lines2)):
-        if len(lines1)<2 or lines1[i] != lines2[i] :
+        if lines1[i] != lines2[i] :
             newGrade = True
             print ('nouvelle note >> '+lines2[i])
-            # envoyer mail avec note et matiere
-            #print(lines2[i])
             newmatiere = re.findall("(.*):",lines2[i])
-            newnote = re.findall(":(.*)",lines2[i])
+            newnote = re.findall("[\d,]*\s/\s20",lines2[i])
             newmatiere[0] = deleteAccent(newmatiere[0])
-            #print("mat : ",newmatiere)
-            #print("note : ",newnote)
             sendGrade(newmatiere[0],newnote[0])
+
+            # maj du fichier de notes local
             fileGrades.close()
             fileGrades = open('grades.txt','w')
             for j in range(len(tabGrades)):
@@ -108,7 +144,6 @@ while True:
 
     if not newGrade :
         print ('pas de nouvelle note')
-        #sendGrade()    
         
     print('done at '+str(datetime.datetime.now())+'\n\n')
 
@@ -118,46 +153,3 @@ while True:
     fileGrades.close()
 
     t.sleep(int(intervalle)*60)
-
-
-# version fonctionnel avec twitter
-"""
-from robobrowser import RoboBrowser
-
-browser = RoboBrowser()
-browser.open('http://twitter.com/login')
-
-# Get the signup form
-signup_form = browser.get_form(class_='signin')
-#signup_form         # <RoboForm user[name]=, user[email]=, ...
-print('get form ...')
-
-# Inspect its values
-print('authenticity_token : ',signup_form['authenticity_token'].value)
-
-# Fill it out
-signup_form['session[username_or_email]'].value = 'tangimds'
-signup_form['session[password]'].value = '6KyY$o7&B7GN'
-
-# Submit the form
-#browser.submit_form(signup_form)
-print('form submit DONE')
-
-res = browser.find(class_="text-input")
-print('res : ', res)
-"""
-
-"""
-if filecmp.cmp("grades.txt","gradesDirty.txt"):
-    print ("Pas de nouvelles notes")
-else :
-    fileGrades.close()
-    fileGrades = open('grades.txt','w')
-    for i in range(len(tabGrades)):
-        fileGrades.write(tabMatieres[i]+" : "+ tabGrades[i] +"\n")
-
-    # envoyer email
-
-    print ("nouvelle note")
-
-"""
