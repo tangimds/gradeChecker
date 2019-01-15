@@ -37,8 +37,8 @@ Renseignez vos identifiants INSA. Par exemple :
 ~jlassalle$ ./gradeChecker.py
 Merci de renseigner vos logins INSA.
 user : jlassalle
-mdp :
-intervalle de verification (en minute) : 15
+password :
+intervalle de verification (en minutes) : 15
 
 pas de nouvelle note
 ********************
