@@ -12,7 +12,6 @@ import time as t
 import getpass
 import datetime
 
-#gérer la mauvaise connection ?
 print("Merci de renseigner vos logins INSA.")
 formatUserIncorrect = True
 while True:
@@ -24,7 +23,7 @@ while True:
     else :
         break
 INSApassword = getpass.getpass("mdp : ")
-
+intervalle = input("intervalle de verification (en minute) : ")
 
 def sendGrade(mat="Pas de nouvelle note",note=""):
     if note == "" :
@@ -43,8 +42,6 @@ def sendGrade(mat="Pas de nouvelle note",note=""):
         mail['To'] = pour
     username = INSAuser+"@insa-rennes.fr" # votre login ici
     password = INSApassword # votre password ici
-    print("mail : ",username)
-    print("mdp : ",password)
     smtp = smtplib.SMTP('mailhost.insa-rennes.fr:587')
     smtp.starttls()
     smtp.login(username,password)
@@ -111,7 +108,7 @@ while True:
 
     if not newGrade :
         print ('pas de nouvelle note')
-        sendGrade()    
+        #sendGrade()    
         
     print('done at '+str(datetime.datetime.now())+'\n\n')
 
@@ -120,7 +117,7 @@ while True:
     tempFile.close()
     fileGrades.close()
 
-    t.sleep(7200)
+    t.sleep(int(intervalle)*60)
 
 
 # version fonctionnel avec twitter
