@@ -32,7 +32,7 @@ Il faut laisser ce script tourner sur une machine.
 ./gradeChecker.py
 ```
 ## Exemple
-ensuite renseignez vos identifiants INSA. Par exemple :
+Ensuite renseignez vos identifiants INSA. Par exemple :
 ```
 ~jlassalle$ ./gradeChecker.py
 Merci de renseigner vos logins INSA.
