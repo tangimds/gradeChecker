@@ -41,8 +41,10 @@ def sendGrade(mat="Pas de nouvelle note",note=""):
         mail['Subject'] = mat+" : "+str(note)
         mail['From'] = de
         mail['To'] = pour
-    username = INSAuser+"@insa-rennes.fr>" # votre login ici
+    username = INSAuser+"@insa-rennes.fr" # votre login ici
     password = INSApassword # votre password ici
+    print("mail : ",username)
+    print("mdp : ",password)
     smtp = smtplib.SMTP('mailhost.insa-rennes.fr:587')
     smtp.starttls()
     smtp.login(username,password)
