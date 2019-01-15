@@ -73,15 +73,15 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 def envoyer(mat="none",note=0):
-    de = "tangimds@gmail.com"
-    pour = "tangimds@gmail.com"
+    de = "tmendes@insa-rennes.fr"
+    pour = "tmendes@insa-rennes.fr"
     mail = MIMEText("Nouvelle note")
     mail['From'] = de
-    mail['Subject'] = mat +" : "+note
+    mail['Subject'] = mat +" : "+str(note)
     mail['To'] = pour
-    username = 'tangimds@gmail.com' # votre login ici
-    password = 'Showtime8/g' # votre password ici
-    smtp = smtplib.SMTP('smtp.gmail.com:587')
+    username = 'tmendes@insa-rennes.fr' # votre login ici
+    password = 'Showtime8/i' # votre password ici
+    smtp = smtplib.SMTP('mailhost.insa-rennes.fr:587')
     smtp.starttls()
     smtp.login(username,password)
     smtp.sendmail(de, [pour], mail.as_string())

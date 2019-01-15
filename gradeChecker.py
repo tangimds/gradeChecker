@@ -13,7 +13,7 @@ import getpass
 import datetime
 
 #gérer la mauvaise connection ?
-
+print("Merci de renseigner vos logins INSA.")
 formatUserIncorrect = True
 while True:
     if formatUserIncorrect :
@@ -28,22 +28,22 @@ INSApassword = getpass.getpass("mdp : ")
 
 def sendGrade(mat="Pas de nouvelle note",note=""):
     if note == "" :
-        de = "GradeChecker <tangimds@gmail.com>"
+        de = "GradeChecker <"+INSAuser+"@insa-rennes.fr>"
         pour = INSAuser+"@insa-rennes.fr"        
         mail = MIMEText("tristesse")
         mail['Subject'] = mat
         mail['From'] = de
         mail['To'] = pour
     else :
-        de = "GradeChecker <tangimds@gmail.com>"
+        de = "GradeChecker <"+INSAuser+"@insa-rennes.fr>"
         pour = INSAuser+"@insa-rennes.fr"        
         mail = MIMEText("Nouvelle note !!\n>"+mat+", avec un 'beau' "+str(note)+"\nFélicitations !")
         mail['Subject'] = mat+" : "+str(note)
         mail['From'] = de
         mail['To'] = pour
-    username = 'tangimds@gmail.com' # votre login ici
-    password = 'Showtime8/g' # votre password ici
-    smtp = smtplib.SMTP('smtp.gmail.com:587')
+    username = INSAuser+"@insa-rennes.fr>" # votre login ici
+    password = INSApassword # votre password ici
+    smtp = smtplib.SMTP('mailhost.insa-rennes.fr:587')
     smtp.starttls()
     smtp.login(username,password)
     smtp.sendmail(de, [pour], mail.as_string())
