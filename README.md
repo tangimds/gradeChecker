@@ -60,4 +60,4 @@ Le script est alors lancé et affiche en console des messages à titre informati
 
 ## Author
 
-* **Tangi Mendes** - *Initial work* - [gradeChecker](https://gitlab.insa-rennes.fr/Tangi.Mendes/gradeChecker)
+* **Tangi Mendes** - [gradeChecker](https://gitlab.insa-rennes.fr/Tangi.Mendes/gradeChecker)
