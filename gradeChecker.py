@@ -75,6 +75,9 @@ while True:
     except ValueError:
         print("Entrez un nombre entier.")
 
+# creation du fichier grades.txt si besoin
+f=open("grades.txt","a")
+f.close()
     
 # main
 while True:
@@ -117,6 +120,8 @@ while True:
         for j in range(len(tabGrades)):
             fileGrades.write(tabMatieres[j]+" : "+ tabGrades[j] +"\n")
         fileGrades.close()
+        os.remove('tempgrades.txt')
+        print('done at '+str(datetime.datetime.now())+'\n\n')
         t.sleep(int(intervalle)*60)
         continue
 
