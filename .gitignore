@@ -1,3 +1,2 @@
-grades.txt
-gradesDirty.txt
+*.txt
 test*
