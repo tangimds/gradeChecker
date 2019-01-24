@@ -12,6 +12,19 @@ import time as t
 import getpass
 import datetime
 
+ESCAPE = "\x1b"
+DEFAULTCOLOR = ESCAPE + "[39m"
+DEFAULT = ESCAPE + "[0m"
+BLACK = ESCAPE + "[30m"
+BLUE = ESCAPE + "[34m"
+RED = ESCAPE + "[31m"
+MEGENTA = ESCAPE + "[35m"
+BLINK = ESCAPE + "[5m"
+INVERTED = ESCAPE + "[7m"
+UNDERLIGNED = ESCAPE + "[4m"
+BOLD = ESCAPE + "[1m"
+BACKWHITE = ESCAPE + "[47m"
+GREY = ESCAPE + "[90m"
 
 #fonction qui envoie un mail
 def sendGrade(mat="Pas de nouvelle note",note=""):
@@ -25,7 +38,7 @@ def sendGrade(mat="Pas de nouvelle note",note=""):
     else :
         de = "GradeChecker <"+INSAuser+"@insa-rennes.fr>"
         pour = INSAuser+"@insa-rennes.fr"        
-        mail = MIMEText("Nouvelle note !!\n>"+mat+", avec un 'beau' "+str(note)+"\nFélicitations !")
+        mail = MIMEText("Nouvelle note !!\n>"+mat+", avec un "+str(note)+"\nFélicitations !")
         mail['Subject'] = mat+" : "+str(note)
         mail['From'] = de
         mail['To'] = pour
@@ -47,33 +60,49 @@ def deleteAccent(mstr):
         mstr = mstr.replace(accent[i], sans_accent[i])
     return mstr
 
+def printError(mstr):
+    print(RED + INVERTED + BACKWHITE + mstr + DEFAULT + DEFAULTCOLOR)
+
+txtGradeChecker = '''
+      ______                  __         ______ __                 __              
+     / ____/_____ ____ _ ____/ /___     / ____// /_   ___   _____ / /__ ___   _____
+    / / __ / ___// __ `// __  // _ \   / /    / __ \ / _ \ / ___// //_// _ \ / ___/
+   / /_/ // /   / /_/ // /_/ //  __/  / /___ / / / //  __// /__ / ,<  /  __// /    
+   \____//_/    \__,_/ \__,_/ \___/   \____//_/ /_/ \___/ \___//_/|_| \___//_/      by Mds, 2019
+
+
+ ******************************************************************************** 
+
+'''
+print(RED + txtGradeChecker + DEFAULTCOLOR)
+
 # identification et teste de validité des valeurs rentrées par l'utilisateur
-print("Merci de renseigner vos logins INSA.")
+print(UNDERLIGNED+"Merci de renseigner vos logins INSA.\n"+DEFAULT)
 
 #user
 formatUserIncorrect = True
 while True:
     if formatUserIncorrect :
-        INSAuser = input("user : ")
+        INSAuser = input(BOLD + "user : " + DEFAULT)
         formatUserIncorrect = not re.match("^[a-zA-Z]*\.*[a-zA-Z]*$",INSAuser)
         if formatUserIncorrect :
-            print ("> format user incorrect. Merci de réessayer.")
+            printError ("> format user incorrect. Merci de réessayer.")
     else :
         break
 
 #password
-INSApassword = getpass.getpass("password : ")
+INSApassword = getpass.getpass(BOLD + "password : " + DEFAULT)
 
 #wainting time (in minutes)
 formatIntervalleIncorrect = True
 while True:
-    intervalle = input("intervalle de verification (en minutes) : ")
+    intervalle = input(BOLD + "intervalle de verification (en minutes) : " + DEFAULT)
     try:
         int(intervalle)
         formatIntervalleIncorrect=False
         break
     except ValueError:
-        print("Entrez un nombre entier.")
+        printError("Format incorrect. Entrez un nombre entier.")
 
 # creation du fichier grades.txt si besoin
 f=open("grades.txt","a")
@@ -100,15 +129,15 @@ while True:
 
     # break si, après identification, on se retrouve sur la page d'erreur
     if browser.find_all(class_="errors") :
-        print("Mauvais identifiant ou Mot de Passe.")
+        printError("Mauvais identifiant ou Mot de Passe.")
         break
 
     # recuperation des notes et noms des matières
     resHtml = browser.find_all(class_="fl-tab-content")
-    tabGrades = re.findall("[\d,]*\s/\s20",str(resHtml))
+    tabGrades = re.findall("[\d]*[,.]*[\d]*\s/\s20",str(resHtml))
     tabMatieres = re.findall("left\">.*\-\s(.*)\s:",str(resHtml))
     for i in range(len(tabGrades)):
-        tempFile.write(tabMatieres[i]+" : "+ tabGrades[i] +"\n")
+        tempFile.write(tabMatieres[i]+" : "+ tabGrades[i].replace(',','.') +"\n")
     tempFile.close()
 
     # cas ou le fichier grades.txt est vide, i.e la premiere execution du script sur cet ordinateur
@@ -137,7 +166,7 @@ while True:
             newGrade = True
             print ('nouvelle note >> '+lines2[i])
             newmatiere = re.findall("(.*):",lines2[i])
-            newnote = re.findall("[\d,]*\s/\s20",lines2[i])
+            newnote = re.findall("[\d]*[,.]*[\d]*\s/\s20",lines2[i])
             newmatiere[0] = deleteAccent(newmatiere[0])
             sendGrade(newmatiere[0],newnote[0])
 
@@ -145,12 +174,12 @@ while True:
             fileGrades.close()
             fileGrades = open('grades.txt','w')
             for j in range(len(tabGrades)):
-                fileGrades.write(tabMatieres[j]+" : "+ tabGrades[j] +"\n")
+                fileGrades.write(tabMatieres[j]+" : "+ tabGrades[j].replace(',','.') +"\n")
 
     if not newGrade :
         print ('pas de nouvelle note')
         
-    print('done at '+str(datetime.datetime.now())+'\n\n')
+    print( GREY + 'done at ' + str(datetime.datetime.now()) + DEFAULTCOLOR + '\n\n')
 
     #clearing
     os.remove('tempgrades.txt')
