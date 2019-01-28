@@ -1,6 +1,7 @@
 # Grade Checker
 ## INSA Rennes
-Script python qui vérifie, toutes les `x` minutes, si il y a une nouvelle note d'ajoutée sur l'ENT. Dans ce cas, un mail est envoyé avec la matière et la note correspondante.
+Script python qui vérifie, toutes les `x` minutes, si il y a une nouvelle note d'ajoutée sur l'ENT. Dans ce cas, un mail est envoyé avec la matière et la note correspondante.  
+Il faut laisser le script tourner sur un ordinateur. *le lancer le matin sur un pc fixe perso, et desactiver la mise en veille automatique*
 
 ## Getting Started
 
@@ -25,9 +26,6 @@ pip3 install robobrowser
 ```
 
 ### Run
-
-Il faut laisser ce script tourner sur une machine.
-
 ```
 ./gradeChecker.py
 ```
@@ -41,9 +39,6 @@ password :
 intervalle de verification (en minutes) : 15
 
 pas de nouvelle note
-********************
-* Message envoyé ! *
-********************
 done at 2019-01-15 13:11:44.414830
 
 ```
@@ -53,7 +48,7 @@ Tapez le normalement et appuyez sur entrer.
 Vous pouvez utiliser les deux formats d'identifiant INSA : `jlassale` ou `jean.lassalle`.  
 Le script est alors lancé et affiche en console des messages à titre informatif, et vous envoie un mail sur votre boîte INSA si il y a une nouvelle note.
 
-### ne pas fermer la console, sinon le script ne tournera plus et vous pourrez attendre vos mails longtemps
+### ne pas fermer la console, ni éteindre l'ordinateur ! (sinon le script ne tournera plus et vous pourrez attendre vos mails longtemps)
 
 
 
