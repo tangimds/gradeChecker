@@ -1,12 +1,14 @@
 # Grade Checker
 ## INSA Rennes
-Script python qui vérifie, toutes les `x` minutes, si il y a une nouvelle note d'ajoutée sur l'ENT. Dans ce cas, un mail est envoyé avec la matière et la note correspondante.  
-Il faut laisser le script tourner sur un ordinateur. *le lancer le matin sur un pc fixe perso, et desactiver la mise en veille automatique*
+GradeChecker est un script python qui vérifie, toutes les `x` minutes, si il y a une nouvelle note d'ajoutée sur l'ENT. Si c'est le cas, un mail est envoyé avec la matière et la note correspondante. 
+
+Il faut évidemment laisser le script tourner sur un ordinateur.
+*ex : le lancer le matin sur un pc fixe perso, et desactiver la mise en veille automatique*
 
 ## Getting Started
 
 ```
-git clone https://gitlab.insa-rennes.fr/tangi.mendes/gradeChecker.git
+git clone https://github.com/tangimds/gradeChecker.git
 ```
 
 ### Prerequisites
@@ -43,9 +45,10 @@ done at 2019-01-15 13:11:44.414830
 
 ```
 
-le mot de passe ne s'affichera pas sur la console, c'est normal.
-Tapez le normalement et appuyez sur entrer.  
-Vous pouvez utiliser les deux formats d'identifiant INSA : `jlassale` ou `jean.lassalle`.  
+Le mot de passe ne s'affichera pas sur la console, c'est normal.
+Tapez le normalement et appuyez sur `entrer`.  
+Vous pouvez utiliser les deux formats d'identifiant INSA : `jlassale` ou `jean.lassalle`.
+
 Le script est alors lancé et affiche en console des messages à titre informatif, et vous envoie un mail sur votre boîte INSA si il y a une nouvelle note.
 
 ### ne pas fermer la console, ni éteindre l'ordinateur ! (sinon le script ne tournera plus et vous pourrez attendre vos mails longtemps)
@@ -55,4 +58,4 @@ Le script est alors lancé et affiche en console des messages à titre informati
 
 ## Author
 
-* **Tangi Mendes** - [gradeChecker](https://gitlab.insa-rennes.fr/Tangi.Mendes/gradeChecker)
+* **Tangi Mendes**(https://github.com/tangimds) - [gradeChecker](https://github.com/tangimds/gradeChecker) - 2019
