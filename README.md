@@ -3,7 +3,7 @@
 GradeChecker est un script python qui vérifie, toutes les `x` minutes, si il y a une nouvelle note d'ajoutée sur l'ENT. Si c'est le cas, un mail est envoyé avec la matière et la note correspondante. 
 
 Il faut évidemment laisser le script tourner sur un ordinateur.
-*ex : le lancer le matin sur un pc fixe perso, et desactiver la mise en veille automatique*
+(*ex : le lancer le matin sur un pc fixe perso, et desactiver la mise en veille automatique*)
 
 ## Getting Started
 
@@ -58,4 +58,4 @@ Le script est alors lancé et affiche en console des messages à titre informati
 
 ## Author
 
-* **Tangi Mendes**(https://github.com/tangimds) - [gradeChecker](https://github.com/tangimds/gradeChecker) - 2019
+* [**Tangi Mendes**](https://github.com/tangimds) - [gradeChecker](https://github.com/tangimds/gradeChecker) - 2019
